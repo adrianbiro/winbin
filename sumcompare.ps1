@@ -35,6 +35,5 @@ if($p1) {
         "Checksum is not valid"
     }
 } else {
-    $sname = $MyInvocation.MyCommand.Name
-    "Usage:`n`t$sname <file>"
+    "Usage:`n`t{0} <file>" -f $MyInvocation.MyCommand.Name
 }

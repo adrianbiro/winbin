@@ -10,6 +10,7 @@
         https://github.com/adrianbiro/winbin
     
 #>
+#Requires -RunAsAdministrator
 
 param (
     [string]$p1
@@ -19,7 +20,8 @@ if($p1){
         "$p1 does not exist."
         exit
     }
-    New-NetFirewallRule -DisplayName $p1 -Direction Inbound -Program $p1 -Profile Domain, Private -Action Allow
+    $dname = "{0} {1}" -f $p1, (Get-Date -Format "dd/MM/yyyy")
+    New-NetFirewallRule -DisplayName $dname -Direction Inbound -Program $p1 -Profile Domain, Private -Action Allow
 } else {
     $sname = $MyInvocation.MyCommand.Name
     "Usage:`n`t$sname <prog.exe>"
