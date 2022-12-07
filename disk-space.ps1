@@ -14,8 +14,8 @@
 param([string]$p1)
 if($p1) { $drive = $p1 } else { $drive = "C"}
 $dobj = Get-PSDrive $drive
-$free = ($dobj.Free / 1024 / 1024) / 1024
-$used = ($dobj.Used / 1024 / 1024) / 1024
-$total = $free + $used
 
-"Disk space:`n`tFree: {0}GB Used: {1}GB Total: {2}GB" -f [math]::Round($free,2), [math]::Round($used,2), [math]::Round($total, 2) 
+"Disk space:`n`tFree: {0}GB Used: {1}GB Total: {2}GB" -f 
+    [math]::Round($dobj.Free/1GB,2), 
+    [math]::Round($dobj.Used/1GB,2), 
+    [math]::Round(($dobj.Free + $dobj.Used)/1GB, 2) 

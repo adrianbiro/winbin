@@ -10,6 +10,8 @@
         https://github.com/adrianbiro/winbin
     
 #>
+#Requires -RunAsAdministrator
+
 (Get-BitLockerVolume 
     | Where-Object{$_.VolumeStatus -eq 'FullyEncrypted' -and $_.VolumeType -eq 'OperatingSystem'}
     ).KeyProtector.RecoveryPassword
