@@ -1,4 +1,5 @@
 # $PROFILE.CurrentUserCurrentHost
+# if (!(Test-Path -Path $PROFILE)) { New-Item -ItemType File -Path $PROFILE -Force}
 # Posh
 # Import-Module posh-git
 
@@ -56,3 +57,11 @@ function Add-Path {
 
 Add-Path -Directory “C:\Users\AdriánBíro\src\winbin”
 Set-Alias lslwcl lslwcl.ps1
+##  (Get-Command Prompt).ScriptBlock
+function prompt {"PS $($executionContext.SessionState.Path.CurrentLocation)
+  $('>' * ($nestedPromptLevel + 1))
+  $(if (git status)
+  {$GB=git branch --show-current;"($GB)" }) ";
+}
+function gita {git add --all;}
+
