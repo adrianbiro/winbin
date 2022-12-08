@@ -58,10 +58,18 @@ function Add-Path {
 Add-Path -Directory “C:\Users\AdriánBíro\src\winbin”
 Set-Alias lslwcl lslwcl.ps1
 ##  (Get-Command Prompt).ScriptBlock
-function prompt {"PS $($executionContext.SessionState.Path.CurrentLocation)
-  $('>' * ($nestedPromptLevel + 1))
-  $(if (git status)
-  {$GB=git branch --show-current;"($GB)" }) ";
+function prompt {"PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1))$(if (git status){$GB=git branch --show-current;"($GB)" }) ";
 }
-function gita {git add --all;}
-
+function gita {
+  git status -s;
+  git add --all;
+}
+function gitap {
+  git status -s;
+  if ($LASTEXITCODE -eq 0) {
+    git add --all;
+    git commit -m "small fixes";
+    $cb = git branch --show-current;
+    git push origin $cb;
+  } 
+}
