@@ -12,7 +12,7 @@
 #>
 param([string]$p1)
 if($p1) {
-    if (!(Test-Path -Path $p1 -PathType Leaf)){
+    if (!(Test-Path -Path $p1 -PathType "Any")){
         "$p1 does not exist."
         exit
     }
