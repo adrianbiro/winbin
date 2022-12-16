@@ -57,7 +57,7 @@ function Add-Path {
 }
 
 Add-Path -Directory “C:\Users\AdriánBíro\src\winbin”
-Set-Alias lslwcl lslwcl.ps1
+Set-Alias less C:\Program` Files\Git\usr\bin\less.exe
 ##  (Get-Command Prompt).ScriptBlock
 function prompt {"PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1))$(if (git status){$GB=git branch --show-current;"($GB)" }) ";
 }

@@ -17,5 +17,5 @@ if($file) {
 } else {
     $jsonstring = $input
 }
-$jsonstring | jq -C '.' | more  #jq is more versatile than pure pwsh  
+$jsonstring | jq '.' -C | C:\Program` Files\Git\usr\bin\less.exe -R #more  #jq is more versatile than pure pwsh  
 #$jsonstring | ConvertTo-Json  | more  #out-host -paging 
