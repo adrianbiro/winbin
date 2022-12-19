@@ -10,10 +10,15 @@ foreach($i in $platforms){
     Set-Variable -Name "GOARCH" -Value $i.split("/")[1]
     $oname = [io.path]::combine($PWD.Path, "bin", "$pkgname-$GOOS-$GOARCH")
     if($GOOS -eq "windows") {$oname += ".exe"}
-    go build -o $oname $pkgName
+    go build -ldflags "-s -w" -o $oname $pkgName  # "-H=windowsgui"
     Clear-Variable -Name "GOOS", "GOARCH"
     if($LASTEXITCODE -ne 0) {
         Write-Warning -Message "An build error has occurred!"
         Exit 1
     }
 }
+# go build flags test
+# $fullexe = "path\to\full\go.exe"; (Get-ChildItem $fullexe).Length / 1MB
+# 5.26123046875
+# $fullexe = "path\with\flags\go.exe"; (Get-ChildItem $fullexe).Length / 1MB
+# 3.65869140625
