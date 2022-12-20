@@ -1,9 +1,8 @@
 
 <#
 .SYNOPSIS
-    Time stamp with optional UTC time zone offset.
+    Time stamp.
 .DESCRIPTION
-    -tz flag for UTC time zone offset.
 .NOTES
 .LINK
     https://github.com/adrianbiro/winbin.
@@ -12,6 +11,18 @@
 #>
 
 
-param([switch] $tz)
-if($tz){$tzform = " K"}
-get-date -Format "yyyy/MM/dd HH:mm:ss.ffff$tzform"
+param(
+    [switch] $tz,
+    [switch] $iso,
+    [switch] $time,
+    [switch] $date,
+    [switch] $date_time
+)
+$tform = if($tz){ "yyyy-MM-dd HH:mm:ss.ffff K" }
+elseif ($iso) { "o" }
+elseif ($time) {"HH:mm:ss"}
+elseif ($date) {"yyyy-MM-dd"}
+elseif ($date_time) {"yyyy-MM-dd HH:mm:ss"}
+else { "yyyy-MM-dd HH:mm:ss.ffff" }
+
+get-date -Format $tform
