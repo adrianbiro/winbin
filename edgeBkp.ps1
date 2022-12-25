@@ -1,2 +1,2 @@
 Get-Process -Name msedge -ErrorAction SilentlyContinue | Stop-Process -Force
-Compress-Archive -Path "$($env:LOCALAPPDATA)\Microsoft\Edge\*" -DestinationPath "edge_backup_$(get-date -Format "dd/MM/yyyy").zip" -CompressionLevel Fastest
+Compress-Archive -Path $(Join-Path -Path $env:LOCALAPPDATA -ChildPath "Microsoft\Edge\*") -DestinationPath "edge_backup_$(get-date -Format "dd/MM/yyyy").zip" -CompressionLevel Fastest
