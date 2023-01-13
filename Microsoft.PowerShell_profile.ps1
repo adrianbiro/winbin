@@ -56,7 +56,7 @@ function Add-Path {
   }
 }
 
-Add-Path -Directory “C:\Users\AdriánBíro\src\winbin”
+Add-Path -Directory “$HOME\src\winbin”
 Set-Alias less C:\Program` Files\Git\usr\bin\less.exe
 Set-Alias vim  C:\Program` Files\Git\usr\bin\vim.exe
 ##  (Get-Command Prompt).ScriptBlock
