@@ -9,7 +9,10 @@ Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineOption -BellStyle Visual
 
 # PSFzf
-#Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+# Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+# Fix encoding 
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+
 
 function Add-Path {
   <#
