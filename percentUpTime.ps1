@@ -1,7 +1,6 @@
 Param(
     [int] $Month,
     [double] $DownTimeSec
-
 )
 $firstDay = Get-Date -Day 1 -Hour 0 -Minute 0 -Second 0 -Month $Month
 $lastDay = ($firstDay).AddMonths(1).AddSeconds(-1)
