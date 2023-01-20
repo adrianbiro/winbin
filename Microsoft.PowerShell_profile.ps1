@@ -86,6 +86,11 @@ function gitap {
     git push origin $cb;
   } 
 }
+
+function type-sh-like{
+  Param([string] $command)
+  (Get-Command $command).ScriptBlock
+}
 # function ssh-autocomplete {
 #   ### ssh
 #   #using namespace System.Management.Automation
