@@ -1,7 +1,8 @@
 # using namespace System.Management.Automation  # TODO
 # add line below to $profile to source this file
 # using module "C:\Users\biroa\src\winbin\Microsoft.PowerShell_profile.ps1"
-
+# import local functions
+using module "C:\Users\biroa\src\winbin\lib\math-functions.ps1"
 # Posh
 # Import-Module posh-git
 # PSReadLine
