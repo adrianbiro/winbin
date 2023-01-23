@@ -22,8 +22,8 @@ if ($path) {
         "$path does not exist."
         exit
     }
-    Get-Content $path -Tail $number 
+    Get-Content $path -Head $number 
 }
 else {
-    $Input | Select-Object -Last $number
+    $Input | Select-Object -First $number
 }
