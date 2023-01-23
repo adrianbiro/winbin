@@ -8,6 +8,8 @@ using module "C:\Users\biroa\src\winbin\lib\math-functions.ps1"
 # PSReadLine
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineOption -BellStyle Visual
+#Set-PSReadlineKeyHandler -Key Tab -Function Complete
+Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
 # PSFzf
 # Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
@@ -91,6 +93,10 @@ function gitap {
 function type-sh-like{
   Param([string] $command)
   (Get-Command $command).ScriptBlock
+}
+
+function uname-a {
+  Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
 }
 # function ssh-autocomplete {
 #   ### ssh
