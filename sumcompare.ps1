@@ -14,7 +14,7 @@
 #>
 param([string]$p1)
 if($p1) {
-    if (!(Test-Path -Path $p1 -PathType Leaf)){
+    if (-not (Test-Path -Path $p1 -PathType Leaf)){
         "$p1 does not exist."
         exit
     }

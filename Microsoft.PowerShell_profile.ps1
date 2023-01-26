@@ -2,7 +2,12 @@
 # add line below to $profile to source this file
 # using module "C:\Users\biroa\src\winbin\Microsoft.PowerShell_profile.ps1"
 # import local functions
+# TODO
+#foreach($i in (Get-ChildItem -Filter '*-functions.ps1').FullName){ . $i }#| Import-Module}
 using module "C:\Users\biroa\src\winbin\lib\math-functions.ps1"
+using module "C:\Users\biroa\src\winbin\lib\docker-functions.ps1"
+using module "C:\Users\biroa\src\winbin\lib\web-functions.ps1"
+using module "C:\Users\biroa\src\winbin\lib\unixlike-functions.ps1"
 # Posh
 # Import-Module posh-git
 # PSReadLine
