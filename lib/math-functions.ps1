@@ -13,19 +13,12 @@ function days-to-EOY {
     return [math]::Round((New-TimeSpan –Start $(get-date) –End $(Get-Date -Day 31 -Month 12)).TotalDays)
 }
 
-function seconds-to {
+function seconds-to-timespan {
     param (
         [Parameter(Mandatory = $True)]
-        [double] $Seconds,
-        [switch] $Hours,
-        [switch] $Days
+        [double] $Seconds
     )
-    if ($Hours) { 
-        return $Seconds / 3600 
-    }
-    else { 
-        return $Seconds / (3600 * 24) 
-    }
+    return ("{0:hh\:mm\:ss}" -f [timespan]::fromseconds($Seconds))
 }
 function percent-up-timne {
     Param(
@@ -51,4 +44,21 @@ function duration-in-hours-from-decimal {
     [int] $minutes = [math]::Floor(($Decimal * 60) % 60)
     [int] $seconds = [math]::Floor(($Decimal * 3600) % 60)
     return "{0}:{1}:{2}" -f $hours, $minutes, $seconds
-  }
+}
+
+function last-week-firts-and-last-day {
+    $days = @{ "Monday" = 0
+        "Tuesday"       = 1
+        "Wednesday"     = 2 
+        "Thursday"      = 3
+        "Friday"        = 4
+        "Saturday"      = 5 
+        "Sunday"        = 6
+    }
+    $DaysFromMonday = $days["$((get-date).DayOfWeek)"]
+    $MondayLastWeek = (get-date).AddDays( - (7 + $DaysFromMonday)) 
+    $SundayLastWeek = $MondayLastWeek.AddDays(6) #-Format 'YYYY-mm-DD'
+    $Start = get-date -Date ($MondayLastWeek) -Format 'yyyy-MM-dd'
+    $End = get-date -Date ($SundayLastWeek) -Format 'yyyy-MM-dd'
+    return $Start, $End
+}
