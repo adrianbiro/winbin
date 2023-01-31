@@ -85,9 +85,10 @@ function gitap {
   git status -s;
   if ($LASTEXITCODE -eq 0) {
     git add --all;
-    if($Amend) {
+    if ($Amend) {
       git commit --amend
-    } else {
+    }
+    else {
       git commit -m "small fixes";
     }
     $cb = git branch --show-current;
@@ -95,7 +96,9 @@ function gitap {
   } 
 }
 
-function type-sh-like{
+function gitt { set-Location -Path (git rev-parse --show-toplevel) }
+
+function type-sh-like {
   Param([string] $command)
   (Get-Command $command).ScriptBlock
 }

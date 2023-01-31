@@ -1,1 +1,1 @@
-function dockermall {docker rm -f (docker ps -aq)}
+function dockermall { docker rm -f (docker ps -aq) }
