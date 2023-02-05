@@ -25,3 +25,12 @@ function unzip {
     )
     Expand-Archive -Path $Path -DestinationPath $DestinationPath 
 }
+
+function getjsonschema {
+    Param([Parameter(Mandatory = $True)]
+        [ValidateScript(
+            { Test-Path -Path $_ -PathType "Leaf" },
+            ErrorMessage = "Not a json file." )]
+        [string] $Path)
+    jq -r 'path(..) | map(tostring) | join("/")' $Path
+}
