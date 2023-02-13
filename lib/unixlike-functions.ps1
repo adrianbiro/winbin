@@ -34,3 +34,13 @@ function getjsonschema {
         [string] $Path)
     jq -r 'path(..) | map(tostring) | join("/")' $Path
 }
+
+function mergejson {
+    # merge 
+    # echo '{"A": {"a": 1}}' '{"A": {"b": 2}}' '{"B": 3}' '{"B": 4}' --> {"A":{"a":1,"b":2},"B":4}
+    $Input | jq --slurp 'reduce .[] as $item ({}; . * $item)'
+}
+function mergejsonduplicatekeys {
+    # echo '{"A": {"a": 1}}' '{"A": {"b": 2}}' '{"B": 3}' '{"B": 4}' --> {"A":[{"a":1},{"b":2}],"B":[3,4]}
+    $Input | jq -s 'map(to_entries) | flatten | group_by(.key) | map({(.[0].key):map(.value)}) | add'
+}
