@@ -44,3 +44,9 @@ function mergejsonduplicatekeys {
     # echo '{"A": {"a": 1}}' '{"A": {"b": 2}}' '{"B": 3}' '{"B": 4}' --> {"A":[{"a":1},{"b":2}],"B":[3,4]}
     $Input | jq -s 'map(to_entries) | flatten | group_by(.key) | map({(.[0].key):map(.value)}) | add'
 }
+
+function cat-fast {
+    #for big files
+    Param([string] $Path)
+    return [System.IO.File]::ReadAllText((Get-ChildItem -Path $Path).FullName)
+}

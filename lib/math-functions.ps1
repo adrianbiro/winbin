@@ -62,3 +62,30 @@ function last-week-firts-and-last-day {
     $End = get-date -Date ($SundayLastWeek) -Format 'yyyy-MM-dd'
     return $Start, $End
 }
+
+function round_sigfigs {
+    <#Round to specified number of sigfigs#>
+    Param(
+        [double] $num,
+        [int] $sig_figs
+    )
+    if ($num -eq 0 ) {
+        <#Can`t take the log of 0#>
+        return 0
+    }
+    return [math]::Round($num, - [int]([math]::Floor([math]::Log10([Math]::Abs($num))) - ($sig_figs - 1 )))
+}
+
+<#function test-round_sigfigs {
+    $results = [array]@()
+    $results += [PSCustomObject]@{num = [double] 3.1415; sig = [int] 2; res = [double]3.1 }
+    $results += [PSCustomObject]@{num = [double] -3.1415; sig = [int] 2; res = [double]-3.1 }
+    $results += [PSCustomObject]@{num = [double] 0; sig = [int] 5; res = [double]0 }
+    $results += [PSCustomObject]@{num = [double] 12345; sig = [int] 2; res = [double]12000 }
+    $results += [PSCustomObject]@{num = [double] -12345; sig = [int] 2; res = [double]-12000 }
+    $results += [PSCustomObject]@{num = [double] 1; sig = [int] 2; res = 1 }
+    $results += [PSCustomObject]@{num = [double] 0.00098765; sig = [int] 2; res = [double]0.00099 }
+    $results | ForEach-Object {
+        (round_sigfigs -num $_.num -sig_figs $_sig) #-eq $_.res
+    }   
+}#>
