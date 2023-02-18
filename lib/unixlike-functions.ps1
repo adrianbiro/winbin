@@ -50,3 +50,7 @@ function cat-fast {
     Param([string] $Path)
     return [System.IO.File]::ReadAllText((Get-ChildItem -Path $Path).FullName)
 }
+
+function gomih {
+    go mod init ((Get-Location).Path -replace ".*\\", "")
+}
