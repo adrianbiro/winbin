@@ -89,3 +89,11 @@ function round_sigfigs {
         (round_sigfigs -num $_.num -sig_figs $_sig) #-eq $_.res
     }   
 }#>
+function is-triangle {
+    Param(
+        [double]$a,
+        [double]$b,
+        [double]$c
+    )
+    return [bool](($a + $b -gt $c) -and ($a + $c -gt $b) -and ($b + $c -gt $a))
+}
