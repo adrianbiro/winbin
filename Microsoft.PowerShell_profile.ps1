@@ -70,8 +70,10 @@ function Add-Path {
 }
 
 Add-Path -Directory “$HOME\src\winbin”
+Add-Path -Directory “$HOME\src\binexe”
 Set-Alias less C:\Program` Files\Git\usr\bin\less.exe
 Set-Alias vim  C:\Program` Files\Git\usr\bin\vim.exe
+#Set-Alias python3-utf8 python3` -X` utf8
 ##  (Get-Command Prompt).ScriptBlock
 function prompt {
   "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1))$(if (git status){$GB=git branch --show-current;"($GB)" }) ";
