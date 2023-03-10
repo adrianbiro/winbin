@@ -71,8 +71,10 @@ function Add-Path {
 
 Add-Path -Directory “$HOME\src\winbin”
 Add-Path -Directory “$HOME\src\binexe”
-Set-Alias less C:\Program` Files\Git\usr\bin\less.exe
-Set-Alias vim  C:\Program` Files\Git\usr\bin\vim.exe
+#Set-Alias less "$env:ProgramFiles\Git\usr\bin\less.exe"
+Set-Alias less "$ENV:LOCALAPPDATA\Programs\Git\usr\bin\less.exe"
+#Set-Alias vim  "$env:ProgramFiles\Git\usr\bin\vim.exe"
+Set-Alias vim "$ENV:LOCALAPPDATA\Programs\Git\usr\bin\vim.exe"
 #Set-Alias python3-utf8 python3` -X` utf8
 ##  (Get-Command Prompt).ScriptBlock
 function prompt {
