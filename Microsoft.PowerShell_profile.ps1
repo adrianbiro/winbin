@@ -19,8 +19,8 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
 
 # Fix encoding 
-#$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding 
-$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding 
+#$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UnicodeEncoding
 
 function Add-Path {
   <#
@@ -76,7 +76,8 @@ foreach ($i in @(“$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin"))
 foreach ($i in @(
     "$ENV:ProgramFiles\Git\usr\bin\less.exe", "$ENV:LOCALAPPDATA\Programs\Git\usr\bin\less.exe",
     "$ENV:ProgramFiles\Git\usr\bin\vim.exe", "$ENV:LOCALAPPDATA\Programs\Git\usr\bin\vim.exe"
-    "$ENV:ProgramFiles\Git\usr\bin\perl.exe", "$ENV:LOCALAPPDATA\Git\usr\bin\perl.exe"
+    "$ENV:ProgramFiles\Git\usr\bin\perl.exe", "$ENV:LOCALAPPDATA\Git\usr\bin\perl.exe",
+    "$ENV:ProgramFiles\Git\usr\bin\sed.exe", "$ENV:LOCALAPPDATA\Git\usr\bin\sed.exe"
   )) {
   if (Test-Path -Path $i -PathType "Leaf") {
     # Set-Alias less C:\Program Files\Git\usr\bin\less.exe
@@ -88,7 +89,7 @@ foreach ($i in @(
 ##  (Get-Command Prompt).ScriptBlock
 function prompt {
   # fix encoding error when it is set to unicode main -> 慭湩
-  $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding 
+  #$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding 
   "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1))$(if (git status){$GB=git branch --show-current;"($GB)" }) ";
 }
 function gita {
