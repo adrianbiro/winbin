@@ -1,1 +1,1 @@
-'using module "C:\Users\biroa\src\winbin\Microsoft.PowerShell_profile.ps1"' > $PROFILE
+"using module `"$HOME\src\winbin\Microsoft.PowerShell_profile.ps1`"" > $PROFILE
