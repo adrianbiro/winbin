@@ -26,7 +26,7 @@ function unzip {
     Expand-Archive -Path $Path -DestinationPath $DestinationPath 
 }
 
-jless {
+function jless {
     <#
     .SYNOPSIS
         jless is pager for json.
