@@ -12,10 +12,10 @@
         https://github.com/adambiro1/winbin
         https://github.com/adrianbiro/winbin
 #>
-param([string]$p1)
-if($p1) {
-    if (-not (Test-Path -Path $p1 -PathType Leaf)){
-        "$p1 does not exist."
+param([string]$File)
+if($File) {
+    if (-not (Test-Path -Path $File -PathType Leaf)){
+        "$File does not exist."
         exit
     }
     $checksum = Get-Clipboard
@@ -28,7 +28,7 @@ if($p1) {
             exit
         }
     }
-    $isoHash = Get-FileHash $p1 -Algorithm sha256
+    $isoHash = Get-FileHash $File -Algorithm sha256
     if ($isoHash.Hash -eq $checksum.ToUpper()) {
         "Checksum is valid."
     } else {

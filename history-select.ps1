@@ -1,6 +1,6 @@
-param([string]$p1)
-if($p1) {
-    Get-History | Where-Object{$_.CommandLine -Match $p1} |
+param([string]$String)
+if($String) {
+    Get-History | Where-Object{$_.CommandLine -Match $String} |
         Tee-Object -Variable Obj | 
         Select-Object Id, CommandLine
     "`n{0} total commands in history" -f $Obj.Count
