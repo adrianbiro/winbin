@@ -2,9 +2,9 @@ if(-not ((Split-Path $PWD -LeafBase) -eq "settings")) {
     "Run from '.\settings' directory."
     exit 1
 }
-[System.IO.FileInfo]$File = Join-Path -Path $HOME -ChildPath "\src\winbin\Microsoft.PowerShell_profile.ps1"
+[System.IO.FileInfo]$File = (Resolve-Path -Path "..\Microsoft.PowerShell_profile.ps1").Path
 #get local pwsh libs 
-[string[]]$Libs = @(Get-ChildItem -Path (Resolve-Path "..\lib\").Path -Filter '*functions.ps1' | ForEach-Object { 
+[string[]]$Libs = @(Get-ChildItem -Path (Resolve-Path -Path "..\lib\").Path -Filter '*-functions.ps1' | ForEach-Object { 
         'using module "{0}"' -f $_.FullName 
     }
 ) 
