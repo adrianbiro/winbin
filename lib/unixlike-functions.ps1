@@ -175,3 +175,13 @@ function rmf {
 function wc {
     $Input | Measure-Object -Line -Word -Character
 }
+
+function cdf {
+    Set-Location -Path (Join-Path -Path $HOME -ChildPath "src/winbin")
+}
+
+    
+function o {
+    bat --pager less 
+}
+    

@@ -18,8 +18,79 @@ Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineOption -BellStyle Visual
 #Set-PSReadlineKeyHandler -Key Tab -Function Complete
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
-# PSFzf
-# Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+# Sometimes you want to get a property of invoke a member on what you've entered so far
+# but you need parens to do that.  This binding will help by putting parens around the current selection,
+# or if nothing is selected, the whole line.
+Set-PSReadLineKeyHandler -Key 'Alt+(' `
+  -BriefDescription ParenthesizeSelection `
+  -LongDescription "Put parenthesis around the selection or entire line and move the cursor to after the closing parenthesis" `
+  -ScriptBlock {
+  param($key, $arg)
+
+  $selectionStart = $null
+  $selectionLength = $null
+  [Microsoft.PowerShell.PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
+
+  $line = $null
+  $cursor = $null
+  [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+  if ($selectionStart -ne -1) {
+    [Microsoft.PowerShell.PSConsoleReadLine]::Replace($selectionStart, $selectionLength, '(' + $line.SubString($selectionStart, $selectionLength) + ')')
+    [Microsoft.PowerShell.PSConsoleReadLine]::SetCursorPosition($selectionStart + $selectionLength + 2)
+  }
+  else {
+    [Microsoft.PowerShell.PSConsoleReadLine]::Replace(0, $line.Length, '(' + $line + ')')
+    [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
+  }
+}
+# This key handler shows the entire or filtered history using Out-GridView. The
+# typed text is used as the substring pattern for filtering. A selected command
+# is inserted to the command line without invoking. Multiple command selection
+# is supported, e.g. selected by Ctrl + Click.
+Set-PSReadLineKeyHandler -Key F7 `
+  -BriefDescription History `
+  -LongDescription 'Show command history' `
+  -ScriptBlock {
+  $pattern = $null
+  [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$pattern, [ref]$null)
+  if ($pattern) {
+    $pattern = [regex]::Escape($pattern)
+  }
+
+  $history = [System.Collections.ArrayList]@(
+    $last = ''
+    $lines = ''
+    foreach ($line in [System.IO.File]::ReadLines((Get-PSReadLineOption).HistorySavePath)) {
+      if ($line.EndsWith('`')) {
+        $line = $line.Substring(0, $line.Length - 1)
+        $lines = if ($lines) {
+          "$lines`n$line"
+        }
+        else {
+          $line
+        }
+        continue
+      }
+
+      if ($lines) {
+        $line = "$lines`n$line"
+        $lines = ''
+      }
+
+      if (($line -cne $last) -and (!$pattern -or ($line -match $pattern))) {
+        $last = $line
+        $line
+      }
+    }
+  )
+  $history.Reverse()
+
+  $command = $history | Out-GridView -Title History -PassThru
+  if ($command) {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert(($command -join "`n"))
+  }
+}
 
 # Fix encoding 
 $OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding 
