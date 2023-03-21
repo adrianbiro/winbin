@@ -14,3 +14,7 @@ if(-not ((Split-Path $PWD -LeafBase) -eq "settings")) {
 Set-Content -Value ([array]$Libs + $cleanProfile) -Path $File
 #source profile file
 Set-Content -Value "using module `"$File`"" -Path $PROFILE
+# Fix excecution warnings
+Set-ExecutionPolicy -Scope "CurrentUser" -ExecutionPolicy "Unrestricted"
+(Get-ChildItem -Path (Resolve-Path -Path "..\") -Recurse).FullName | ForEach-Object { Unblock-File -Path $_ }
+
