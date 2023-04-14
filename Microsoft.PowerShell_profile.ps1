@@ -142,7 +142,7 @@ function Add-Path {
     $ENV:PATH = [String]::Join(';', $Path)
   }
 }
-foreach ($i in @(“$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin")) { 
+foreach ($i in @(“$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin", "$HOME\bin\sqlplus", "$HOME\bin\oraclesqltools", "$ENV:ProgramFiles\Python3109", "$ENV:ProgramFiles\nodejs")) {  
   if (Test-Path -Path $i -PathType "Container") {
     Add-Path -Directory $i 
   }
