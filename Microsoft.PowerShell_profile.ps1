@@ -142,7 +142,11 @@ function Add-Path {
     $ENV:PATH = [String]::Join(';', $Path)
   }
 }
-foreach ($i in @(“$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin", "$HOME\bin\sqlplus", "$HOME\bin\oraclesqltools", "$ENV:ProgramFiles\Python3109", "$ENV:ProgramFiles\nodejs")) {  
+foreach ($i in @(
+    “$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin", "$HOME\bin\sqlplus", 
+    "$HOME\bin\oraclesqltools", "$ENV:ProgramFiles\Python3109", "$ENV:ProgramFiles\nodejs",
+    (Get-ChildItem  "$ENV:LOCALAPPDATA\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python311\Scripts").FullName
+  )) {  
   if (Test-Path -Path $i -PathType "Container") {
     Add-Path -Directory $i 
   }

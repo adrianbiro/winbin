@@ -1,4 +1,7 @@
-function my-public-ip { Invoke-RestMethod -uri http://ipinfo.io/json }
+function my-public-ip { 
+    Param([string]$IP = "json")
+    Invoke-RestMethod -uri ('http://ipinfo.io/{0}' -f $IP) 
+}
 function ipfromec2url {
     Param(
         [Parameter(Mandatory = $True)]
