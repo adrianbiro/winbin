@@ -1,9 +1,9 @@
-using module "C:\Users\biroa\src\winbin\lib\docker-functions.ps1"
-using module "C:\Users\biroa\src\winbin\lib\git-functions.ps1"
-using module "C:\Users\biroa\src\winbin\lib\math-functions.ps1"
-using module "C:\Users\biroa\src\winbin\lib\ssh-functions.ps1"
-using module "C:\Users\biroa\src\winbin\lib\unixlike-functions.ps1"
-using module "C:\Users\biroa\src\winbin\lib\web-functions.ps1"
+# "C:\Users\biroa\src\winbin\lib\docker-functions.ps1"
+#using module "C:\Users\biroa\src\winbin\lib\git-functions.ps1"
+#using module "C:\Users\biroa\src\winbin\lib\math-functions.ps1"
+#using module "C:\Users\biroa\src\winbin\lib\ssh-functions.ps1"
+#using module "C:\Users\biroa\src\winbin\lib\unixlike-functions.ps1"
+#using module "C:\Users\biroa\src\winbin\lib\web-functions.ps1"
 <#
   .SYNOPSIS
     The lines above are auto-generated use, ".\settings\fix-pwsh-profile.ps1" to bootstrap $PROFILE
@@ -13,6 +13,16 @@ using module "C:\Users\biroa\src\winbin\lib\web-functions.ps1"
   .EXAMPLE
     .\settings\fix-pwsh-profile.ps1
 #>
+#Requires -Version 7.0
+# ForEach-Object -InputObject @(
+# "lib\git-functions.ps1",
+# "lib\math-functions.ps1",
+# "lib\ssh-functions.ps1",
+# "lib\unixlike-functions.ps1",
+# "lib\web-functions.ps1"
+# ) {
+# . (Resolve-Path -Path (Join-Path -Path $script:MyInvocation.MyCommand.Path -ChildPath [str]$_)).Path
+# }
 # PSReadLine
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineOption -BellStyle Visual
@@ -171,9 +181,9 @@ function Add-Path {
 foreach ($i in @(
     “$HOME\src\winbin”, “$HOME\src\binexe”, “$HOME\bin", "$HOME\bin\sqlplus", 
     "$HOME\bin\oraclesqltools", "$ENV:ProgramFiles\Python3109", "$ENV:ProgramFiles\nodejs",
-    (Get-ChildItem  "$ENV:LOCALAPPDATA\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python311\Scripts").FullName
+    (Get-ChildItem  "$ENV:LOCALAPPDATA\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python311\Scripts" -ErrorAction SilentlyContinue).FullName
   )) {  
-  if (Test-Path -Path $i -PathType "Container") {
+  if (Test-Path -Path $i -PathType "Container" -ErrorAction SilentlyContinue) {
     Add-Path -Directory $i 
   }
 }
