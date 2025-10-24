@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+	<!--https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-US&Locale=en-US&Keyboard=00000409&UseKeyboard2=true&Locale2=sk-SK&Keyboard2=0001041b&GeoLocation=143&ProcessorArchitecture=amd64&BypassRequirementsCheck=true&ComputerNameMode=Random&CompactOsMode=Default&TimeZoneMode=Implicit&PartitionMode=Interactive&DiskAssertionMode=Skip&WindowsEditionMode=Generic&WindowsEdition=pro&InstallFromMode=Automatic&PEMode=Default&UserAccountMode=Unattended&AccountName0=Admin&AccountDisplayName0=&AccountPassword0=&AccountGroup0=Administrators&AccountName1=User&AccountDisplayName1=&AccountPassword1=&AccountGroup1=Users&AutoLogonMode=Own&PasswordExpirationMode=Unlimited&LockoutMode=Default&HideFiles=Hidden&TaskbarSearch=Hide&TaskbarIconsMode=Default&LeftTaskbar=true&StartTilesMode=Default&StartPinsMode=Default&EffectsMode=Performance&DesktopIconsMode=Default&StartFoldersMode=Default&VBoxGuestAdditions=true&VMwareTools=true&VirtIoGuestTools=true&ParallelsTools=true&WifiMode=Interactive&ExpressSettings=DisableAll&LockKeysMode=Skip&StickyKeysMode=Default&ColorMode=Default&WallpaperMode=Default&LockScreenMode=Default&WdacMode=Skip-->
+	<settings pass="offlineServicing"></settings>
+	<settings pass="windowsPE">
+		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<UILanguage>en-US</UILanguage>
+		</component>
+		<component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<UserData>
+				<ProductKey>
+					<Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+					<WillShowUI>OnError</WillShowUI>
+				</ProductKey>
+				<AcceptEula>true</AcceptEula>
+			</UserData>
+			<UseConfigurationSet>false</UseConfigurationSet>
+			<RunSynchronous>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassTPMCheck /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassSecureBootCheck /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassRAMCheck /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+	</settings>
+	<settings pass="generalize"></settings>
+	<settings pass="specialize">
+		<component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<RunSynchronous>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Path>powershell.exe -WindowStyle Normal -NoProfile -Command "$xml = [xml]::new(); $xml.Load('C:\Windows\Panther\unattend.xml'); $sb = [scriptblock]::Create( $xml.unattend.Extensions.ExtractScript ); Invoke-Command -ScriptBlock $sb -ArgumentList $xml;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<Path>powershell.exe -WindowStyle Normal -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\Specialize.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>4</Order>
+					<Path>powershell.exe -WindowStyle Normal -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\DefaultUser.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>5</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+	</settings>
+	<settings pass="auditSystem"></settings>
+	<settings pass="auditUser"></settings>
+	<settings pass="oobeSystem">
+		<component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<InputLocale>0409:00000409;041b:0001041b</InputLocale>
+			<SystemLocale>en-US</SystemLocale>
+			<UILanguage>en-US</UILanguage>
+			<UserLocale>en-US</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<UserAccounts>
+				<LocalAccounts>
+					<LocalAccount wcm:action="add">
+						<Name>Admin</Name>
+						<DisplayName></DisplayName>
+						<Group>Administrators</Group>
+						<Password>
+							<Value></Value>
+							<PlainText>true</PlainText>
+						</Password>
+					</LocalAccount>
+					<LocalAccount wcm:action="add">
+						<Name>User</Name>
+						<DisplayName></DisplayName>
+						<Group>Users</Group>
+						<Password>
+							<Value></Value>
+							<PlainText>true</PlainText>
+						</Password>
+					</LocalAccount>
+				</LocalAccounts>
+			</UserAccounts>
+			<AutoLogon>
+				<Username>Admin</Username>
+				<Enabled>true</Enabled>
+				<LogonCount>1</LogonCount>
+				<Password>
+					<Value></Value>
+					<PlainText>true</PlainText>
+				</Password>
+			</AutoLogon>
+			<OOBE>
+				<ProtectYourPC>3</ProtectYourPC>
+				<HideEULAPage>true</HideEULAPage>
+				<HideWirelessSetupInOOBE>false</HideWirelessSetupInOOBE>
+				<HideOnlineAccountScreens>false</HideOnlineAccountScreens>
+			</OOBE>
+			<FirstLogonCommands>
+				<SynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<CommandLine>powershell.exe -WindowStyle Normal -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\FirstLogon.ps1' -Raw | Invoke-Expression;"</CommandLine>
+				</SynchronousCommand>
+			</FirstLogonCommands>
+		</component>
+	</settings>
+	<Extensions xmlns="https://schneegans.de/windows/unattend-generator/">
+		<ExtractScript>
+param(
+    [xml] $Document
+);
+
+foreach( $file in $Document.unattend.Extensions.File ) {
+    $path = [System.Environment]::ExpandEnvironmentVariables( $file.GetAttribute( 'path' ) );
+    mkdir -Path( $path | Split-Path -Parent ) -ErrorAction 'SilentlyContinue';
+    $encoding = switch( [System.IO.Path]::GetExtension( $path ) ) {
+        { $_ -in '.ps1', '.xml' } { [System.Text.Encoding]::UTF8; }
+        { $_ -in '.reg', '.vbs', '.js' } { [System.Text.UnicodeEncoding]::new( $false, $true ); }
+        default { [System.Text.Encoding]::Default; }
+    };
+    $bytes = $encoding.GetPreamble() + $encoding.GetBytes( $file.InnerText.Trim() );
+    [System.IO.File]::WriteAllBytes( $path, $bytes );
+}
+		</ExtractScript>
+		<File path="C:\Windows\Setup\Scripts\VBoxGuestAdditions.ps1">
+&amp; {
+	foreach( $letter in 'DEFGHIJKLMNOPQRSTUVWXYZ'.ToCharArray() ) {
+		$exe = "${letter}:\VBoxWindowsAdditions.exe";
+		if( Test-Path -LiteralPath $exe ) {
+			$certs = "${letter}:\cert";
+			Start-Process -FilePath "${certs}\VBoxCertUtil.exe" -ArgumentList "add-trusted-publisher ${certs}\vbox*.cer", "--root ${certs}\vbox*.cer"  -Wait;
+			Start-Process -FilePath $exe -ArgumentList '/with_wddm', '/S' -Wait;
+			return;
+		}
+	}
+	'VBoxGuestAdditions.iso is not attached to this VM.';
+} *&gt;&amp;1 | Out-String &gt;&gt; 'C:\Windows\Setup\Scripts\VBoxGuestAdditions.log';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\VMwareTools.ps1">
+&amp; {
+	foreach( $letter in 'DEFGHIJKLMNOPQRSTUVWXYZ'.ToCharArray() ) {
+		$exe = "${letter}:\setup.exe";
+		if( ( Get-Item -LiteralPath $exe -ErrorAction 'SilentlyContinue' | Select-Object -ExpandProperty 'VersionInfo' | Select-Object -ExpandProperty 'ProductName' ) -eq 'VMware Tools' ) {
+			Start-Process -FilePath $exe -ArgumentList '/s /v /qn REBOOT=R' -Wait;
+			return;
+		}
+	}
+	'VMware Tools image (windows.iso) is not attached to this VM.';
+} *&gt;&amp;1 | Out-String &gt;&gt; 'C:\Windows\Setup\Scripts\VMwareTools.log';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\VirtIoGuestTools.ps1">
+&amp; {
+	foreach( $letter in 'DEFGHIJKLMNOPQRSTUVWXYZ'.ToCharArray() ) {
+		$exe = "${letter}:\virtio-win-guest-tools.exe";
+		if( Test-Path -LiteralPath $exe ) {
+			Start-Process -FilePath $exe -ArgumentList '/passive', '/norestart' -Wait;
+			return;
+		}
+	}
+	'VirtIO Guest Tools image (virtio-win-*.iso) is not attached to this VM.';
+} *&gt;&amp;1 | Out-String &gt;&gt; 'C:\Windows\Setup\Scripts\VirtIoGuestTools.log';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\ParallelsTools.ps1">
+&amp; {
+	foreach( $letter in 'DEFGHIJKLMNOPQRSTUVWXYZ'.ToCharArray() ) {
+		$exe = "${letter}:\PTAgent.exe";
+		if( Test-Path -LiteralPath $exe ) {
+      # https://kb.parallels.com/116161/
+      # Install without any UI, don't reboot after install, and block (process doesn't exit) until installation is complete.
+      #
+      # Networking will work after this, but some other features such as touch
+      # id pass through and shared clipboard support won't work until reboot
+			Start-Process -FilePath $exe -ArgumentList '/install_silent' -Wait;
+			return;
+		}
+	}
+	'Parallels Tools image (prl-tools-win-*.iso) is not attached to this VM.';
+} *&gt;&amp;1 | Out-String &gt;&gt; 'C:\Windows\Setup\Scripts\ParallelsTools.log';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\Specialize.ps1">
+$scripts = @(
+	{
+		reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v AllowUpgradesWithUnsupportedTPMOrCPU /t REG_DWORD /d 1 /f;
+	};
+	{
+		net.exe accounts /maxpwage:UNLIMITED;
+	};
+	{
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DWMAeroPeekEnabled" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\SelectionFade" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DWMSaveThumbnailEnabled" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\CursorShadow" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewShadow" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ThumbnailsOrIcon" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewAlphaSelect" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DragFullWindows" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListBoxSmoothScrolling" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+		Set-ItemProperty -LiteralPath "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DropShadow" -Name 'DefaultValue' -Value 0 -Type 'DWord' -Force;
+	};
+);
+
+&amp; {
+  [float] $complete = 0;
+  [float] $increment = 100 / $scripts.Count;
+  foreach( $script in $scripts ) {
+    Write-Progress -Activity 'Running scripts to customize your Windows installation. Do not close this window.' -PercentComplete $complete;
+    '*** Will now execute command &#xAB;{0}&#xBB;.' -f $(
+      $str = $script.ToString().Trim() -replace '\s+', ' ';
+      $max = 100;
+      if( $str.Length -le $max ) {
+        $str;
+      } else {
+        $str.Substring( 0, $max - 1 ) + '&#x2026;';
+      }
+    );
+    $start = [datetime]::Now;
+    &amp; $script;
+    '*** Finished executing command after {0:0} ms.' -f [datetime]::Now.Subtract( $start ).TotalMilliseconds;
+    "`r`n" * 3;
+    $complete += $increment;
+  }
+} *&gt;&amp;1 | Out-String &gt;&gt; "C:\Windows\Setup\Scripts\Specialize.log";
+		</File>
+		<File path="C:\Windows\Setup\Scripts\UserOnce.ps1">
+$scripts = @(
+	{
+		Set-WinHomeLocation -GeoId 143;
+	};
+	{
+		Set-ItemProperty -LiteralPath 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Search' -Name 'SearchboxTaskbarMode' -Type 'DWord' -Value 0;
+	};
+	{
+		Set-ItemProperty -LiteralPath 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects' -Name 'VisualFXSetting' -Type 'DWord' -Value 2 -Force;
+	};
+	{
+		Get-Process -Name 'explorer' -ErrorAction 'SilentlyContinue' | Where-Object -FilterScript {
+			$_.SessionId -eq ( Get-Process -Id $PID ).SessionId;
+		} | Stop-Process -Force;
+	};
+);
+
+&amp; {
+  [float] $complete = 0;
+  [float] $increment = 100 / $scripts.Count;
+  foreach( $script in $scripts ) {
+    Write-Progress -Activity 'Running scripts to configure this user account. Do not close this window.' -PercentComplete $complete;
+    '*** Will now execute command &#xAB;{0}&#xBB;.' -f $(
+      $str = $script.ToString().Trim() -replace '\s+', ' ';
+      $max = 100;
+      if( $str.Length -le $max ) {
+        $str;
+      } else {
+        $str.Substring( 0, $max - 1 ) + '&#x2026;';
+      }
+    );
+    $start = [datetime]::Now;
+    &amp; $script;
+    '*** Finished executing command after {0:0} ms.' -f [datetime]::Now.Subtract( $start ).TotalMilliseconds;
+    "`r`n" * 3;
+    $complete += $increment;
+  }
+} *&gt;&amp;1 | Out-String &gt;&gt; "$env:TEMP\UserOnce.log";
+		</File>
+		<File path="C:\Windows\Setup\Scripts\DefaultUser.ps1">
+$scripts = @(
+	{
+		reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v TaskbarAl /t REG_DWORD /d 0 /f;
+	};
+	{
+		reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "UnattendedSetup" /t REG_SZ /d "powershell.exe -WindowStyle Normal -NoProfile -Command \""Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\UserOnce.ps1' -Raw | Invoke-Expression;\""" /f;
+	};
+);
+
+&amp; {
+  [float] $complete = 0;
+  [float] $increment = 100 / $scripts.Count;
+  foreach( $script in $scripts ) {
+    Write-Progress -Activity 'Running scripts to modify the default user&#x2019;&#x2019;s registry hive. Do not close this window.' -PercentComplete $complete;
+    '*** Will now execute command &#xAB;{0}&#xBB;.' -f $(
+      $str = $script.ToString().Trim() -replace '\s+', ' ';
+      $max = 100;
+      if( $str.Length -le $max ) {
+        $str;
+      } else {
+        $str.Substring( 0, $max - 1 ) + '&#x2026;';
+      }
+    );
+    $start = [datetime]::Now;
+    &amp; $script;
+    '*** Finished executing command after {0:0} ms.' -f [datetime]::Now.Subtract( $start ).TotalMilliseconds;
+    "`r`n" * 3;
+    $complete += $increment;
+  }
+} *&gt;&amp;1 | Out-String &gt;&gt; "C:\Windows\Setup\Scripts\DefaultUser.log";
+		</File>
+		<File path="C:\Windows\Setup\Scripts\FirstLogon.ps1">
+$scripts = @(
+	{
+		Set-ItemProperty -LiteralPath 'Registry::HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name 'AutoLogonCount' -Type 'DWord' -Force -Value 0;
+	};
+	{
+		Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\VBoxGuestAdditions.ps1' -Raw | Invoke-Expression;
+	};
+	{
+		Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\VMwareTools.ps1' -Raw | Invoke-Expression;
+	};
+	{
+		Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\VirtIoGuestTools.ps1' -Raw | Invoke-Expression;
+	};
+	{
+		Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\ParallelsTools.ps1' -Raw | Invoke-Expression;
+	};
+	{
+		Remove-Item -LiteralPath @(
+		  'C:\Windows\Panther\unattend.xml';
+		  'C:\Windows\Panther\unattend-original.xml';
+		  'C:\Windows\Setup\Scripts\Wifi.xml';
+		) -Force -ErrorAction 'SilentlyContinue' -Verbose;
+	};
+);
+
+&amp; {
+  [float] $complete = 0;
+  [float] $increment = 100 / $scripts.Count;
+  foreach( $script in $scripts ) {
+    Write-Progress -Activity 'Running scripts to finalize your Windows installation. Do not close this window.' -PercentComplete $complete;
+    '*** Will now execute command &#xAB;{0}&#xBB;.' -f $(
+      $str = $script.ToString().Trim() -replace '\s+', ' ';
+      $max = 100;
+      if( $str.Length -le $max ) {
+        $str;
+      } else {
+        $str.Substring( 0, $max - 1 ) + '&#x2026;';
+      }
+    );
+    $start = [datetime]::Now;
+    &amp; $script;
+    '*** Finished executing command after {0:0} ms.' -f [datetime]::Now.Subtract( $start ).TotalMilliseconds;
+    "`r`n" * 3;
+    $complete += $increment;
+  }
+} *&gt;&amp;1 | Out-String &gt;&gt; "C:\Windows\Setup\Scripts\FirstLogon.log";
+		</File>
+	</Extensions>
+</unattend>
